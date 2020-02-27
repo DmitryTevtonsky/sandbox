@@ -1,10 +1,11 @@
 import React from 'react';
-import './App.css';
+import './index.css';
+import Avatar from './components/Avatar';
 
 const RabbitAuth = () => {
   return (
-    <div className="App">
-      
+    <div className="layout">
+      <Avatar />
     </div>
   );
 }

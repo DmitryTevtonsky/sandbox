@@ -1,0 +1,183 @@
+{
+  "extends": [
+    "airbnb-typescript",
+    "prettier",
+    "prettier/react",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": [
+    "deprecate",
+    "sort-imports-es6-autofix",
+    "github",
+    "prettier",
+    "react-hooks",
+    "jsx-a11y",
+    "@typescript-eslint",
+    "import"
+  ],
+  "rules": {
+    "@typescript-eslint/no-implied-eval": "off",
+    "@typescript-eslint/no-throw-literal": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "no-restricted-globals": ["error", "event", "fdescribe"],
+    "@typescript-eslint/indent": "off",
+    "react/state-in-constructor": "off",
+    "react/jsx-props-no-spreading": [
+      "error",
+      {
+        "html": "ignore"
+      }
+    ],
+    "@typescript-eslint/consistent-type-assertions": [
+      0,
+      {
+        "assertionStyle": "as"
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": ["off"],
+    "prettier/prettier": [
+      "error",
+      {
+        "trailingComma": "none",
+        "singleQuote": true
+      }
+    ],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    ],
+    "deprecate/import": ["warn"],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "import/no-useless-path-segments": "warn",
+    "import/namespace": "off",
+    "import/no-cycle": "error",
+    "import/prefer-default-export": "off",
+    "import/no-deprecated": "warn",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ],
+    "import/named": "off",
+    "sort-imports-es6-autofix/sort-imports-es6": [
+      "error",
+      {
+        "ignoreCase": false,
+        "ignoreMemberSort": false,
+        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+      }
+    ],
+    "no-debugger": "warn",
+    "eqeqeq": ["error", "smart"],
+    "no-console": "warn",
+    "require-await": "error",
+    "no-return-await": "error",
+    "no-await-in-loop": "warn",
+    "no-empty-pattern": "warn",
+    "no-unused-expressions": "off",
+    "@typescript-eslint/no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true,
+        "allowTaggedTemplates": true
+      }
+    ],
+    "no-unused-labels": "warn",
+    "no-unused-vars": ["warn"],
+    "no-useless-computed-key": "warn",
+    "no-useless-concat": "warn",
+    "no-useless-constructor": "warn",
+    "no-useless-escape": "warn",
+    "no-useless-rename": [
+      "warn",
+      {
+        "ignoreDestructuring": false,
+        "ignoreImport": false,
+        "ignoreExport": false
+      }
+    ],
+    "no-constant-condition": "warn",
+    "no-return-assign": "error",
+    "no-sequences": "error",
+    "consistent-return": "error",
+    "react/prop-types": "warn",
+    "react/display-name": [0],
+    "react/jsx-no-comment-textnodes": "warn",
+    "react/jsx-no-duplicate-props": [
+      "warn",
+      {
+        "ignoreCase": true
+      }
+    ],
+    "react/jsx-no-target-blank": "warn",
+    "react/jsx-no-undef": "error",
+    "react/jsx-pascal-case": [
+      "warn",
+      {
+        "allowAllCaps": true,
+        "ignore": []
+      }
+    ],
+    "react/jsx-uses-react": "warn",
+    "react/jsx-uses-vars": "warn",
+    "react/jsx-sort-props": [
+      1,
+      {
+        "callbacksLast": false,
+        "shorthandFirst": true,
+        "reservedFirst": true
+      }
+    ],
+    "react/no-deprecated": "warn",
+    "react/no-unused-state": "warn",
+    "react/no-direct-mutation-state": "error",
+    "react/no-access-state-in-setstate": "error",
+    "react/no-is-mounted": "warn",
+    "react/no-children-prop": "warn",
+    "react/no-danger-with-children": "error",
+    "react/no-this-in-sfc": "error",
+    "react/no-unused-prop-types": "warn",
+    "react/jsx-handler-names": "warn",
+    "react/jsx-key": "warn",
+    "react/react-in-jsx-scope": "error",
+    "react/require-render-return": "error",
+    "react/no-unescaped-entities": "off",
+    "react/style-prop-object": "warn",
+    "react/button-has-type": "error",
+    "react/no-unknown-property": "warn"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2019,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "useJSXTextNode": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/extensions": [".ts", ".tsx"],
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".ts", ".tsx"]
+      }
+    }
+  }
+}
