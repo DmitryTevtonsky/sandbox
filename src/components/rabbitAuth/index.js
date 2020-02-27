@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-function App() {
+const RabbitAuth = () => {
   return (
     <div className="App">
       
@@ -9,4 +9,4 @@ function App() {
   );
 }
 
-export default App;
+export default RabbitAuth;
