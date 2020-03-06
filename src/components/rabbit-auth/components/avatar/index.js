@@ -1,13 +1,14 @@
 import React from 'react';
+import logo from './avatar.svg';
+
 import './index.css';
-import logo from './avatar.svg'
 
 const Avatar = () => {
   return (
     <div className="avatar">
-      <img src={logo}></img>
+      <img src={logo} alt="avatar" />
     </div>
   );
-}
+};
 
 export default Avatar;

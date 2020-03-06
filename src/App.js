@@ -1,13 +1,14 @@
 import React from 'react';
+import RabbitAuth from './components/rabbit-auth';
+
 import './App.css';
-import RabbitAuth from './components/rabbitAuth';
 
 const App = () => {
   return (
     <div className="App">
-      <RabbitAuth></RabbitAuth>
+      <RabbitAuth />
     </div>
   );
-}
+};
 
 export default App;
