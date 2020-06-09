@@ -4,21 +4,18 @@ import KMeans from 'k-meansjs';
 import { Button, Input, message } from 'antd';
 
 import './index.css';
-import {
-  draw,
-  random,
-  generateClusterColors,
-  generateSampleData
-} from './kmeans';
+import { draw, generateClusterColors, generateSampleData } from './kmeans';
 
 const KMeansComponent = () => {
   const canvas = useRef();
   const [pointsCount, setPointsCount] = useState(100);
   const [centersCount, setCentersCount] = useState(3);
+  const [clustersCount, setClustersCount] = useState(3);
+
   const [isWorking, setIsWorking] = useState(false);
 
-  const kPoints = 4; // random(3, 6);
-  const clusterColors = generateClusterColors(kPoints);
+  const clusterColors = generateClusterColors(clustersCount);
+  console.log('clusterColors', clusterColors);
   const data = generateSampleData(pointsCount);
 
   const kmeansRun = context => {
@@ -67,6 +64,8 @@ const KMeansComponent = () => {
 
   const handleOnChangeCentersCount = e => setCentersCount(e.target.value);
 
+  const handleOnChangeClustersCount = e => setClustersCount(e.target.value);
+
   const handleRun = () => {
     const context = canvas.current.getContext('2d');
     kmeansRun(context);
@@ -85,6 +84,12 @@ const KMeansComponent = () => {
         <Input
           placeholder="Количество центров (3)"
           onChange={handleOnChangeCentersCount}
+          allowClear
+        />
+
+        <Input
+          placeholder="Количество кластеров (3)"
+          onChange={handleOnChangeClustersCount}
           allowClear
         />
 
