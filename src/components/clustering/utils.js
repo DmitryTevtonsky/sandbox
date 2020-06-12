@@ -24,6 +24,77 @@ export function generateClusterColors(size) {
   return colors;
 }
 
+export const getOption = randomization => {
+  let option;
+  switch (randomization) {
+    case 'linear': {
+      option = {
+        name: 'linear',
+        scope: 2,
+        err: 200
+      };
+      break;
+    }
+    case 'circular': {
+      option = {
+        name: 'circular',
+        k: 25,
+        err: 20,
+        outlier: 30
+      };
+      break;
+    }
+    default: {
+      option = {
+        name: ''
+      };
+      break;
+    }
+  }
+  return option;
+};
+
+export const generateData = (pointsCount, rangeX, rangeY, offset, option) => {
+  const data = generateRandomPoints(
+    offset,
+    rangeX - offset,
+    offset,
+    rangeY - offset,
+    pointsCount,
+    option
+  ).map(point => Object.values(point));
+
+  const Xxes = [];
+  const Yxes = [];
+  data.forEach(([x, y]) => {
+    Xxes.push(x);
+    Yxes.push(y);
+  });
+
+  const extents = [
+    {
+      min: Math.min.apply(null, Xxes),
+      max: Math.max.apply(null, Xxes)
+    },
+    {
+      min: Math.min.apply(null, Yxes),
+      max: Math.max.apply(null, Yxes)
+    }
+  ];
+
+  const dataExtentRanges = () => {
+    const ranges = [];
+
+    for (let i = 0; i < extents.length; i++) {
+      ranges[i] = extents[i].max - extents[i].min;
+    }
+
+    return ranges;
+  };
+
+  return { data, extents, ranges: dataExtentRanges() };
+};
+
 export function generateRandomPoints(min_x, max_x, min_y, max_y, num, option) {
   const rand_pts = [];
   switch (option.name) {
@@ -39,8 +110,8 @@ export function generateRandomPoints(min_x, max_x, min_y, max_y, num, option) {
         } else {
           const lx = Math.random() * (max_x - min_x) + min_x;
           const ly = lx * scope;
-          var errx = Math.random() * err - err / 2;
-          var erry = Math.random() * err - err / 2;
+          const errx = Math.random() * err - err / 2;
+          const erry = Math.random() * err - err / 2;
           rand_pts[i] = {
             x: lx + errx,
             y: ly + erry
@@ -52,10 +123,10 @@ export function generateRandomPoints(min_x, max_x, min_y, max_y, num, option) {
     case 'circular': {
       const r = [];
       const seeds = [];
-      seeds.length = option.k;
-      r.length = option.k;
-      const { k } = option;
-      for (var i = 0; i < option.k; i++) {
+      const { k, outlier, err } = option;
+      seeds.length = k;
+      r.length = k;
+      for (var i = 0; i < k; i++) {
         seeds[i] = {
           x: Math.random() * (max_x - min_x) + min_x,
           y: Math.random() * (max_y - min_y) + min_y
@@ -63,7 +134,7 @@ export function generateRandomPoints(min_x, max_x, min_y, max_y, num, option) {
         r[i] = Math.random() * ((max_x - min_x) / 4);
       }
       for (var i = 0; i < num; i++) {
-        if (i > num - option.outlier) {
+        if (i > num - outlier) {
           rand_pts[i] = {
             x: Math.random() * (max_x - min_x) + min_x,
             y: Math.random() * (max_y - min_y) + min_y
@@ -80,8 +151,8 @@ export function generateRandomPoints(min_x, max_x, min_y, max_y, num, option) {
               Math.pow(-1, (i % 2) + 1) +
             seeds[i % k].y;
 
-          var errx = Math.random() * option.err - option.err / 2;
-          var erry = Math.random() * option.err - option.err / 2;
+          const errx = Math.random() * err - err / 2;
+          const erry = Math.random() * err - err / 2;
           rx += errx;
           ry += erry;
 
@@ -99,7 +170,6 @@ export function generateRandomPoints(min_x, max_x, min_y, max_y, num, option) {
       break;
     }
     default: {
-      console.log('default');
       for (var i = 0; i < num; i++) {
         rand_pts[i] = [
           Math.random() * (max_x - min_x) + min_x,

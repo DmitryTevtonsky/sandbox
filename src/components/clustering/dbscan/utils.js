@@ -8,8 +8,6 @@ export function draw(context, data, labels, colors, extents, ranges) {
   let point;
   let i;
 
-  console.log(data);
-
   // Plot every point onto canvas.
   for (i = 0; i < data.length; i++) {
     context.save();

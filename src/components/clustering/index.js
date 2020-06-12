@@ -1,80 +1,70 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { Tabs } from 'antd';
+import { Tabs, Select, InputNumber, Button } from 'antd';
 import KMeansComponent from './k-means';
 
 import './index.css';
 import DbscanComponent from './dbscan';
-import { generateRandomPoints } from './utils';
+import { generateData, getOption } from './utils';
 
 const { TabPane } = Tabs;
-
-const generateData = (pointsCount, rangeX, rangeY, offset) => {
-  const data = generateRandomPoints(
-    offset,
-    rangeX - offset,
-    offset,
-    rangeY - offset,
-    pointsCount,
-    {
-      name: 'linear',
-      scope: 5,
-      err: 150
-    }
-    // {
-    //   name: 'circular',
-    //   scope: 0,
-    //   k: 3,
-    //   err: 0,
-    //   outlier: 40
-    // }
-  ).map(point => Object.values(point));
-
-  const Xxes = [];
-  const Yxes = [];
-  data.forEach(([x, y]) => {
-    Xxes.push(x);
-    Yxes.push(y);
-  });
-
-  const extents = [
-    {
-      min: Math.min.apply(null, Xxes),
-      max: Math.max.apply(null, Xxes)
-    },
-    {
-      min: Math.min.apply(null, Yxes),
-      max: Math.max.apply(null, Yxes)
-    }
-  ];
-
-  const dataExtentRanges = () => {
-    const ranges = [];
-
-    for (let i = 0; i < extents.length; i++) {
-      ranges[i] = extents[i].max - extents[i].min;
-    }
-
-    return ranges;
-  };
-
-  return { data, extents, ranges: dataExtentRanges() };
-};
+const { Option } = Select;
 
 const Clustering = () => {
+  const [randomization, setRandomization] = useState('circular');
+  const [pointsCount, setPointsCount] = useState(1000);
+
   const maxX = 540;
   const maxY = 540;
   const offset = 20;
+
   const [generatedData, setGeneratedData] = useState(
-    generateData(100, maxX, maxY, offset)
+    generateData(pointsCount, maxX, maxY, offset, getOption(randomization))
   );
 
   useEffect(() => {
-    // setGeneratedData(data);
-  }, []);
+    console.log('wtf');
+    setGeneratedData(
+      generateData(pointsCount, maxX, maxY, offset, getOption(randomization))
+    );
+  }, [randomization]);
+
+  const onChangeRandomization = value => setRandomization(value);
+
+  const handleOnChangePointsCount = value => setPointsCount(value);
+
+  const recalcPoints = () =>
+    setGeneratedData(
+      generateData(pointsCount, maxX, maxY, offset, getOption(randomization))
+    );
+
+  const operations = (
+    <div className="operations">
+      <InputNumber
+        placeholder="Количество точек (1000)"
+        onChange={handleOnChangePointsCount}
+        allowClear
+        style={{ width: 220 }}
+        min={10}
+        max={10000}
+      />
+      <Button icon="reload" onClick={recalcPoints} />
+      <Select
+        style={{ width: 150 }}
+        placeholder="Выберите распределение"
+        onChange={onChangeRandomization}
+        value={randomization}
+      >
+        <Option value="linear">Линейное</Option>
+        <Option value="circular">Круговое</Option>
+        <Option value="">Равномерное</Option>
+      </Select>
+    </div>
+  );
+
   return (
     <div className="clustering-box">
-      <Tabs defaultActiveKey="2">
+      <Tabs defaultActiveKey="2" tabBarExtraContent={operations}>
         <TabPane tab="K-MEANS" key="1">
           <KMeansComponent
             data={generatedData.data}

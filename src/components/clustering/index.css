@@ -2,3 +2,12 @@
     width:  100%;
     padding: 10px 40px;
 }
+
+.operations {
+    display: flex;
+    align-items: center;
+}
+
+.operations > div,.operations > button  {
+    margin-right: 5px;
+}

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-console */
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import KMeans from 'k-meansjs';
@@ -5,15 +6,14 @@ import { Button, Input, Checkbox } from 'antd';
 
 import './index.css';
 import { draw, calculateLength } from './kmeans';
-import { generateRandomPoints, generateClusterColors } from '../utils';
+import { generateClusterColors } from '../utils';
 
 const KMeansComponent = ({ data }) => {
   const canvas = useRef();
   const maxX = 540;
   const maxY = 540;
-  const [pointsCount, setPointsCount] = useState(100);
-  const [centersCount, setCentersCount] = useState(3);
-  const [clustersCount, setClustersCount] = useState(3);
+  const [centersCount, setCentersCount] = useState(5);
+  const [clustersCount, setClustersCount] = useState(5);
   const [isShowLengths, setIsShowLengths] = useState(false);
 
   const [isWorking, setIsWorking] = useState(false);
@@ -61,7 +61,7 @@ const KMeansComponent = ({ data }) => {
     });
 
     kmeans.run({
-      delay: 50
+      delay: 0
     });
   };
 
@@ -69,9 +69,7 @@ const KMeansComponent = ({ data }) => {
     const context = canvas.current.getContext('2d');
 
     kmeansRun(context);
-  }, []);
-
-  const handleOnChangePointsCount = e => setPointsCount(e.target.value);
+  }, [data]);
 
   const handleOnChangeCentersCount = e => setCentersCount(e.target.value);
 
@@ -88,11 +86,6 @@ const KMeansComponent = ({ data }) => {
       K-means
       <canvas ref={canvas} id="canvas" width={maxX} height={maxY} />
       <div className="controls">
-        <Input
-          placeholder="Количество точек (10)"
-          onChange={handleOnChangePointsCount}
-          allowClear
-        />
         <Input
           placeholder="Количество центров (3)"
           onChange={handleOnChangeCentersCount}

@@ -83,15 +83,14 @@ export function calculateLength(
     const defLength = Math.round(
       fullLengths[i].reduce((sum, curr) => sum + curr) / fullLengths[i].length
     );
-
-    context.shadowColor = clusterColors[i];
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
-    context.shadowBlur = 3;
+    const { width } = context.measureText(defLength);
+    context.fillStyle = 'white';
+    context.fillRect(10, -20, width + 10, 12);
 
     context.fillStyle = 'black';
-    context.font = 'bold 10pt Arial';
-    context.fillText(defLength, 10, -10);
+    context.textAlign = 'left';
+    context.font = 'bold 14px Arial';
+    context.fillText(defLength, 10, -9);
 
     context.restore();
   }
