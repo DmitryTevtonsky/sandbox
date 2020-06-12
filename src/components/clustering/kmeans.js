@@ -24,6 +24,7 @@ export function generateClusterColors(size) {
 }
 
 export function calculateLength(
+  isShowSubLength,
   fullLengths,
   context,
   clusterColors,
@@ -39,19 +40,14 @@ export function calculateLength(
   let i;
   for (i = 0; i < assignments.length; i++) {
     const meanIndex = assignments[i];
-
     point = data[i];
     const mean = means[meanIndex];
 
-    // Make lines that will get drawn alpha transparent.
     context.globalAlpha = 1;
-
-    // Push current state onto the stack.
     context.save();
 
     context.beginPath();
 
-    // Begin path from current point origin.
     const x1 =
       (point[0] - extents[0].min + 1) * (canvas.width / (ranges[0] + 2));
     const y1 =
@@ -67,16 +63,21 @@ export function calculateLength(
     context.lineTo(x2, y2);
 
     const length = Math.round(Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2));
-    console.log(`Длина ${i}-го отрезка для ${assignments[i]} центра =`, length);
 
-    context.fillStyle = 'black';
-    context.textAlign = 'center';
-    context.textBaseline = 'bottom';
+    if (isShowSubLength) {
+      console.log(
+        `Длина ${i}-го отрезка для ${assignments[i]} центра =`,
+        length
+      );
 
-    context.font = 'bold  7pt Arial';
-    context.fillText(length, x1, y1 - 5);
+      context.fillStyle = 'black';
+      context.textAlign = 'center';
+      context.textBaseline = 'bottom';
 
-    // Draw a stroke on the path to make it visible.
+      context.font = 'bold  7pt Arial';
+      context.fillText(length, x1, y1 - 5);
+    }
+
     context.strokeStyle = clusterColors[assignments[i]];
     context.stroke();
 

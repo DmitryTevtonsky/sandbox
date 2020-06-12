@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import KMeans from 'k-meansjs';
-import { Button, Input, message } from 'antd';
+import { Button, Input, message, Checkbox } from 'antd';
 
 import './index.css';
 import {
@@ -16,6 +16,7 @@ const KMeansComponent = () => {
   const [pointsCount, setPointsCount] = useState(10);
   const [centersCount, setCentersCount] = useState(3);
   const [clustersCount, setClustersCount] = useState(3);
+  const [isShowLengths, setIsShowLengths] = useState(false);
 
   const [isWorking, setIsWorking] = useState(false);
 
@@ -54,6 +55,7 @@ const KMeansComponent = () => {
         `Построение заняло следующее количество итераций: ${self.iterations}`
       );
       return calculateLength(
+        isShowLengths,
         fullLengths,
         context,
         clusterColors,
@@ -86,6 +88,8 @@ const KMeansComponent = () => {
     kmeansRun(canvas.current.getContext('2d'));
   };
 
+  const onChengeIsShowLengths = e => setIsShowLengths(e.target.checked);
+
   return (
     <div className="k-means-box">
       k-means implementation
@@ -106,9 +110,14 @@ const KMeansComponent = () => {
           onChange={handleOnChangeClustersCount}
           allowClear
         />
-        <Button loading={isWorking} onClick={handleRun} type="primary">
-          Перезапуск
-        </Button>
+        <div>
+          <Checkbox onChange={onChengeIsShowLengths}>
+            Показывать расстояния до цетройдов
+          </Checkbox>
+          <Button loading={isWorking} onClick={handleRun} type="primary">
+            Перезапуск
+          </Button>
+        </div>
       </div>
     </div>
   );
