@@ -40,17 +40,22 @@ export function draw(
 
   let point;
   let i;
-
+  // const lengths =
   /* Iterate though points draw line from their origin to their cluster centroid.
    * `assignments` contains cluster centroid index for each point.
    */
+  console.log('assignments', assignments);
+
   for (i = 0; i < assignments.length; i++) {
     const meanIndex = assignments[i];
+    console.log('meanIndex', meanIndex);
+
     point = data[i];
     const mean = means[meanIndex];
+    console.log('means', means);
 
     // Make lines that will get drawn alpha transparent.
-    context.globalAlpha = 0.1;
+    // context.globalAlpha = 0.1;
 
     // Push current state onto the stack.
     context.save();
@@ -58,19 +63,29 @@ export function draw(
     context.beginPath();
 
     // Begin path from current point origin.
-    context.moveTo(
-      (point[0] - extents[0].min + 1) * (canvas.width / (ranges[0] + 2)),
-      (point[1] - extents[1].min + 1) * (canvas.height / (ranges[1] + 2))
-    );
+    const x1 =
+      (point[0] - extents[0].min + 1) * (canvas.width / (ranges[0] + 2));
+    const y1 =
+      (point[1] - extents[1].min + 1) * (canvas.height / (ranges[1] + 2));
+
+    const x2 =
+      (mean[0] - extents[0].min + 1) * (canvas.width / (ranges[0] + 2));
+    const y2 =
+      (mean[1] - extents[1].min + 1) * (canvas.height / (ranges[1] + 2));
 
     // Draw path from the point (moveTo) to the cluster centroid.
-    context.lineTo(
-      (mean[0] - extents[0].min + 1) * (canvas.width / (ranges[0] + 2)),
-      (mean[1] - extents[1].min + 1) * (canvas.height / (ranges[1] + 2))
-    );
+    context.moveTo(x1, y1);
+    context.lineTo(x2, y2);
+
+    const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+    console.log('length', length);
 
     // Draw a stroke on the path to make it visible.
-    context.strokeStyle = 'black';
+    if (meanIndex === 0) {
+      context.strokeStyle = 'red';
+    } else {
+      context.strokeStyle = 'black';
+    }
     context.stroke();
     // context.closePath();
 
@@ -107,6 +122,8 @@ export function draw(
 
     context.restore();
   }
+
+  // console.log('means', means);
 
   // Draw cluster centroids (means).
   for (i = 0; i < means.length; i++) {

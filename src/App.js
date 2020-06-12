@@ -1,7 +1,7 @@
 import React from 'react';
 // import RabbitAuth from './components/rabbit-auth';
 // import TestBox from './components/test-box';
-import KMeansComponent from './components/k-means';
+import KMeansComponent from './components/clustering';
 
 import './App.css';
 

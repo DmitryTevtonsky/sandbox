@@ -15,8 +15,8 @@ const KMeansComponent = () => {
   const [isWorking, setIsWorking] = useState(false);
 
   const clusterColors = generateClusterColors(clustersCount);
-  console.log('clusterColors', clusterColors);
   const data = generateSampleData(pointsCount);
+  console.log('data', data);
 
   const kmeansRun = context => {
     setIsWorking(true);
@@ -29,7 +29,7 @@ const KMeansComponent = () => {
       k: centersCount
     });
 
-    kmeans.on('iteration', self => {
+    kmeans.on('iteration', self =>
       draw(
         context,
         clusterColors,
@@ -38,8 +38,8 @@ const KMeansComponent = () => {
         self.assignments,
         self.extents,
         self.ranges
-      );
-    });
+      )
+    );
 
     kmeans.on('end', self => {
       setIsWorking(false);
@@ -66,10 +66,7 @@ const KMeansComponent = () => {
 
   const handleOnChangeClustersCount = e => setClustersCount(e.target.value);
 
-  const handleRun = () => {
-    const context = canvas.current.getContext('2d');
-    kmeansRun(context);
-  };
+  const handleRun = () => kmeansRun(canvas.current.getContext('2d'));
 
   return (
     <div className="k-means-box">
@@ -93,7 +90,7 @@ const KMeansComponent = () => {
           allowClear
         />
 
-        <Button disabled={isWorking} onClick={handleRun} type="default">
+        <Button loading={isWorking} onClick={handleRun} type="primary">
           Перезапуск
         </Button>
       </div>
