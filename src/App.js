@@ -1,7 +1,7 @@
 import React from 'react';
 // import RabbitAuth from './components/rabbit-auth';
 // import TestBox from './components/test-box';
-import KMeansComponent from './components/clustering';
+import Clustering from './components/clustering';
 
 import './App.css';
 
@@ -10,7 +10,7 @@ const App = () => {
     <div className="App">
       {/* <RabbitAuth /> */}
       {/* <TestBox /> */}
-      {<KMeansComponent />}
+      {<Clustering />}
     </div>
   );
 };

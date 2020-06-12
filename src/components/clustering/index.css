@@ -1,20 +1,4 @@
-.k-means-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid gray;
-    padding: 10px;
-    width: 90%;
-    height: 90%;
+.clustering-box {
+    width:  100%;
+    padding: 10px 40px;
 }
-
-.controls {
-    margin-top: 10px;
-
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-

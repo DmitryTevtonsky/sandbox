@@ -1,28 +1,3 @@
-import faker from 'faker';
-
-export function random(start, end) {
-  const dif = end - start;
-  return Math.random() * dif + start + 1;
-}
-
-export function generateSampleData(points) {
-  const data = [];
-  // Generate random data
-  for (let i = 0; i < points; i++) {
-    data.push([random(0, 10), random(0, 10)]);
-  }
-  return data;
-}
-
-export function generateClusterColors(size) {
-  const colors = [];
-  // Generate point color for each cluster.
-  for (let i = 0; i < size; i++) {
-    colors.push(faker.internet.color());
-  }
-  return colors;
-}
-
 export function calculateLength(
   isShowSubLength,
   fullLengths,

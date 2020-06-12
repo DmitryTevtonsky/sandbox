@@ -1,126 +1,101 @@
 /* eslint-disable no-console */
-import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
-import KMeans from 'k-meansjs';
-import { Button, Input, message, Checkbox } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Tabs } from 'antd';
+import KMeansComponent from './k-means';
 
 import './index.css';
-import {
-  draw,
-  generateClusterColors,
-  generateSampleData,
-  calculateLength
-} from './kmeans';
+import DbscanComponent from './dbscan';
+import { generateRandomPoints } from './utils';
 
-const KMeansComponent = () => {
-  const canvas = useRef();
-  const [pointsCount, setPointsCount] = useState(10);
-  const [centersCount, setCentersCount] = useState(3);
-  const [clustersCount, setClustersCount] = useState(3);
-  const [isShowLengths, setIsShowLengths] = useState(false);
+const { TabPane } = Tabs;
 
-  const [isWorking, setIsWorking] = useState(false);
+const generateData = (pointsCount, rangeX, rangeY, offset) => {
+  const data = generateRandomPoints(
+    offset,
+    rangeX - offset,
+    offset,
+    rangeY - offset,
+    pointsCount,
+    {
+      name: 'linear',
+      scope: 5,
+      err: 150
+    }
+    // {
+    //   name: 'circular',
+    //   scope: 0,
+    //   k: 3,
+    //   err: 0,
+    //   outlier: 40
+    // }
+  ).map(point => Object.values(point));
 
-  const kmeansRun = context => {
-    setIsWorking(true);
-    context.clearRect(0, 0, canvas.width, canvas.height);
+  const Xxes = [];
+  const Yxes = [];
+  data.forEach(([x, y]) => {
+    Xxes.push(x);
+    Yxes.push(y);
+  });
 
-    const clusterColors = generateClusterColors(clustersCount);
-    const data = generateSampleData(pointsCount);
-    console.log('Входные данные:', data);
+  const extents = [
+    {
+      min: Math.min.apply(null, Xxes),
+      max: Math.max.apply(null, Xxes)
+    },
+    {
+      min: Math.min.apply(null, Yxes),
+      max: Math.max.apply(null, Yxes)
+    }
+  ];
 
-    const kmeans = KMeans({
-      data,
-      k: centersCount
-    });
+  const dataExtentRanges = () => {
+    const ranges = [];
 
-    const fullLengths = Array.from({ length: centersCount }, () => []);
+    for (let i = 0; i < extents.length; i++) {
+      ranges[i] = extents[i].max - extents[i].min;
+    }
 
-    kmeans.on('iteration', self =>
-      draw(
-        fullLengths,
-        context,
-        clusterColors,
-        self.data,
-        self.means,
-        self.assignments,
-        self.extents,
-        self.ranges
-      )
-    );
-
-    kmeans.on('end', self => {
-      setIsWorking(false);
-      console.log(`Построение заняло кол-во итераций: ${self.iterations}`);
-      message.success(
-        `Построение заняло следующее количество итераций: ${self.iterations}`
-      );
-      return calculateLength(
-        isShowLengths,
-        fullLengths,
-        context,
-        clusterColors,
-        self.data,
-        self.means,
-        self.assignments,
-        self.extents,
-        self.ranges
-      );
-    });
-
-    kmeans.run({
-      delay: 50
-    });
+    return ranges;
   };
 
-  useLayoutEffect(() => {
-    const context = canvas.current.getContext('2d');
+  return { data, extents, ranges: dataExtentRanges() };
+};
 
-    kmeansRun(context);
+const Clustering = () => {
+  const maxX = 540;
+  const maxY = 540;
+  const offset = 20;
+  const [generatedData, setGeneratedData] = useState(
+    generateData(100, maxX, maxY, offset)
+  );
+
+  useEffect(() => {
+    // setGeneratedData(data);
   }, []);
-
-  const handleOnChangePointsCount = e => setPointsCount(e.target.value);
-
-  const handleOnChangeCentersCount = e => setCentersCount(e.target.value);
-
-  const handleOnChangeClustersCount = e => setClustersCount(e.target.value);
-
-  const handleRun = () => {
-    kmeansRun(canvas.current.getContext('2d'));
-  };
-
-  const onChengeIsShowLengths = e => setIsShowLengths(e.target.checked);
-
   return (
-    <div className="k-means-box">
-      k-means implementation
-      <canvas ref={canvas} id="canvas" width="600" height="600" />
-      <div className="controls">
-        <Input
-          placeholder="Количество точек (10)"
-          onChange={handleOnChangePointsCount}
-          allowClear
-        />
-        <Input
-          placeholder="Количество центров (3)"
-          onChange={handleOnChangeCentersCount}
-          allowClear
-        />
-        <Input
-          placeholder="Количество кластеров (3)"
-          onChange={handleOnChangeClustersCount}
-          allowClear
-        />
-        <div>
-          <Checkbox onChange={onChengeIsShowLengths}>
-            Показывать расстояния до цетройдов
-          </Checkbox>
-          <Button loading={isWorking} onClick={handleRun} type="primary">
-            Перезапуск
-          </Button>
-        </div>
-      </div>
+    <div className="clustering-box">
+      <Tabs defaultActiveKey="2">
+        <TabPane tab="K-MEANS" key="1">
+          <KMeansComponent
+            data={generatedData.data}
+            maxX={maxX}
+            maxY={maxY}
+            offset={offset}
+          />
+        </TabPane>
+        <TabPane tab="DBSCAN" key="2">
+          <DbscanComponent
+            data={generatedData.data}
+            ranges={generatedData.ranges}
+            extents={generatedData.extents}
+            maxX={maxX}
+            maxY={maxY}
+            offset={offset}
+          />
+        </TabPane>
+      </Tabs>
     </div>
   );
 };
 
-export default KMeansComponent;
+export default Clustering;
