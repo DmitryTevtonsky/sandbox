@@ -16,13 +16,68 @@
 }
 
 .buttons {
-    margin-top: 10px;
+    margin-top: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .controls > span {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
+.clusterInfoBlock {
+    margin-right: 10px;
+    padding: 0 2px;
+    min-width: 50px;
+    min-height: 40px;
+    border-radius: 5px;
+}
+
+.clusterTitle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.clusterTitle > div:first-child{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.clusterTitle > div:last-child{
+    font-weight: bold;
+}
+
+.clusterInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.clusterMark {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+.controls > .ant-alert  {
+    padding: 5px;
+}
+
+.controls > .ant-alert > .ant-alert-description {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    overflow: auto;
+}
+
+.controls > .ant-alert > .ant-alert-message {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

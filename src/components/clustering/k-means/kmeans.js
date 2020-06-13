@@ -61,6 +61,8 @@ export function calculateLength(
     context.restore();
   }
 
+  const calculatedLengths = [];
+
   for (i = 0; i < means.length; i++) {
     context.save();
 
@@ -83,6 +85,7 @@ export function calculateLength(
     const defLength = Math.round(
       fullLengths[i].reduce((sum, curr) => sum + curr) / fullLengths[i].length
     );
+    calculatedLengths.push(defLength);
     const { width } = context.measureText(defLength);
     context.fillStyle = 'white';
     context.fillRect(10, -20, width + 10, 12);
@@ -94,7 +97,7 @@ export function calculateLength(
 
     context.restore();
   }
-  return fullLengths;
+  return calculatedLengths;
 }
 
 export function draw(

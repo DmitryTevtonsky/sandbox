@@ -13,10 +13,11 @@ const { Option } = Select;
 const Clustering = () => {
   const [randomization, setRandomization] = useState('circular');
   const [pointsCount, setPointsCount] = useState(1000);
+  const [isKmeansWorking, setIsKmeansWorking] = useState(true);
 
   const maxX = 540;
   const maxY = 540;
-  const offset = 20;
+  const offset = 0;
 
   const [generatedData, setGeneratedData] = useState(
     generateData(pointsCount, maxX, maxY, offset, getOption(randomization))
@@ -41,19 +42,21 @@ const Clustering = () => {
   const operations = (
     <div className="operations">
       <InputNumber
+        disabled={isKmeansWorking}
         placeholder="Количество точек (1000)"
         onChange={handleOnChangePointsCount}
         allowClear
         style={{ width: 220 }}
         min={10}
-        max={10000}
+        max={5000}
       />
-      <Button icon="reload" onClick={recalcPoints} />
+      <Button icon="reload" onClick={recalcPoints} loading={isKmeansWorking} />
       <Select
         style={{ width: 150 }}
         placeholder="Выберите распределение"
         onChange={onChangeRandomization}
         value={randomization}
+        disabled={isKmeansWorking}
       >
         <Option value="linear">Линейное</Option>
         <Option value="circular">Круговое</Option>
@@ -70,7 +73,8 @@ const Clustering = () => {
             data={generatedData.data}
             maxX={maxX}
             maxY={maxY}
-            offset={offset}
+            isKmeansWorking={isKmeansWorking}
+            setIsKmeansWorking={setIsKmeansWorking}
           />
         </TabPane>
         <TabPane tab="DBSCAN" key="2">
@@ -80,7 +84,6 @@ const Clustering = () => {
             extents={generatedData.extents}
             maxX={maxX}
             maxY={maxY}
-            offset={offset}
           />
         </TabPane>
       </Tabs>
