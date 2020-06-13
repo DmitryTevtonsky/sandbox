@@ -3,6 +3,10 @@
     padding: 10px 40px;
 }
 
+canvas {
+    border: 1px solid gray;
+}
+
 .operations {
     display: flex;
     align-items: center;
