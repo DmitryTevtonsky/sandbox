@@ -3,11 +3,12 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import dbscan from 'dbscanjs';
 
-import { Input, Button, Alert } from 'antd';
+import { Input, Button, Alert, Icon, Drawer } from 'antd';
 import { generateClusterColors } from '../utils';
 import { draw } from './utils';
 
 import './index.css';
+import DbscanInfoComponent from './info';
 
 const distance = (a, b) => {
   const x = (a[0] - b[0]) ** 2;
@@ -21,6 +22,7 @@ const DbscanComponent = ({ data, ranges, extents, maxX, maxY }) => {
   const [minPts, setMinPts] = useState(5);
   const [clustersCount, setClustersCount] = useState(0);
   const [noisesCount, setNoisesCount] = useState(0);
+  const [infoVisible, setInfoVisible] = useState(false);
 
   const dbScanRun = () => {
     const context = canvas.current.getContext('2d');
@@ -30,7 +32,6 @@ const DbscanComponent = ({ data, ranges, extents, maxX, maxY }) => {
     const uniqLabels = Array.from(new Set(labels));
     setNoisesCount(labels.filter(label => label === -1).length);
     setClustersCount(uniqLabels.length);
-    console.log('uniqLabels', uniqLabels);
 
     const colors = generateClusterColors(uniqLabels.length);
 
@@ -38,7 +39,6 @@ const DbscanComponent = ({ data, ranges, extents, maxX, maxY }) => {
   };
 
   useLayoutEffect(() => {
-    console.log('Сгенерированные данные', data);
     dbScanRun();
   }, [data]);
 
@@ -52,8 +52,30 @@ const DbscanComponent = ({ data, ranges, extents, maxX, maxY }) => {
 
   return (
     <div className="dbscan-box">
-      DBSCAN
-      <canvas ref={canvas} id="canvas" width={maxX} height={maxY} />
+      <div className="box-title">
+        DBSCAN
+        <Icon
+          type="info-circle"
+          theme="twoTone"
+          className="info-icon"
+          onClick={() => setInfoVisible(true)}
+        />
+        <Drawer
+          width="50%"
+          visible={infoVisible}
+          closable={false}
+          onClose={() => setInfoVisible(false)}
+        >
+          <DbscanInfoComponent />
+        </Drawer>
+      </div>
+      <canvas
+        ref={canvas}
+        id="canvas"
+        width={maxX}
+        height={maxY}
+        style={{ marginRight: infoVisible && 'auto' }}
+      />
       <div className="controls">
         <Input
           placeholder="minPts  (5)"

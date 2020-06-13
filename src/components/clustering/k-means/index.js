@@ -2,11 +2,12 @@
 /* eslint-disable no-console */
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import KMeans from 'k-meansjs';
-import { Button, Input, Checkbox, Alert } from 'antd';
+import { Button, Input, Checkbox, Alert, Icon, Drawer } from 'antd';
 
 import './index.css';
 import { draw, calculateLength } from './kmeans';
 import { generateClusterColors } from '../utils';
+import KMeansInfoComponent from './info';
 
 const KMeansComponent = ({
   data,
@@ -21,6 +22,7 @@ const KMeansComponent = ({
   const [isShowLengths, setIsShowLengths] = useState(false);
   const [mainLengths, setMainLengths] = useState([]);
   const [clusterColors, setClusterColors] = useState([]);
+  const [infoVisible, setInfoVisible] = useState(false);
 
   const kmeansRun = context => {
     setIsKmeansWorking(true);
@@ -65,8 +67,6 @@ const KMeansComponent = ({
         self.ranges
       );
       setMainLengths(calculatedLengths);
-      console.log(`lengths: ${calculatedLengths}`);
-      console.log(`colors: ${generateColors}`);
     });
 
     kmeans.run({
@@ -75,9 +75,10 @@ const KMeansComponent = ({
   };
 
   useLayoutEffect(() => {
-    const context = canvas.current.getContext('2d');
-
-    kmeansRun(context);
+    if (data && data.length > 0) {
+      const context = canvas.current.getContext('2d');
+      kmeansRun(context);
+    }
   }, [data]);
 
   const handleOnChangeCentersCount = e => setCentersCount(e.target.value);
@@ -112,8 +113,30 @@ const KMeansComponent = ({
 
   return (
     <div className="k-means-box">
-      K-means
-      <canvas ref={canvas} id="canvas" width={maxX} height={maxY} />
+      <div className="box-title">
+        K-MEANS
+        <Icon
+          className="info-icon"
+          type="info-circle"
+          theme="twoTone"
+          onClick={() => setInfoVisible(true)}
+        />
+        <Drawer
+          width="50%"
+          visible={infoVisible}
+          closable={false}
+          onClose={() => setInfoVisible(false)}
+        >
+          <KMeansInfoComponent />
+        </Drawer>
+      </div>
+      <canvas
+        ref={canvas}
+        id="canvas"
+        width={maxX}
+        height={maxY}
+        style={{ marginRight: infoVisible && 'auto' }}
+      />
       <div className="controls">
         <Input
           placeholder="Количество центров (5)"

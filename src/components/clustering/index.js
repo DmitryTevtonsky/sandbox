@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Tabs, Select, InputNumber, Button } from 'antd';
 import KMeansComponent from './k-means';
 
@@ -19,25 +19,35 @@ const Clustering = () => {
   const maxY = 540;
   const offset = 0;
 
-  const [generatedData, setGeneratedData] = useState(
-    generateData(pointsCount, maxX, maxY, offset, getOption(randomization))
-  );
+  const [generatedData, setGeneratedData] = useState({ data: [] });
 
-  useEffect(() => {
-    console.log('wtf');
-    setGeneratedData(
-      generateData(pointsCount, maxX, maxY, offset, getOption(randomization))
+  useLayoutEffect(() => {
+    const data = generateData(
+      pointsCount,
+      maxX,
+      maxY,
+      offset,
+      getOption(randomization)
     );
+    setGeneratedData(data);
+    console.log('Сгенерированные данные', data);
   }, [randomization]);
 
   const onChangeRandomization = value => setRandomization(value);
 
   const handleOnChangePointsCount = value => setPointsCount(value);
 
-  const recalcPoints = () =>
-    setGeneratedData(
-      generateData(pointsCount, maxX, maxY, offset, getOption(randomization))
+  const recalcPoints = () => {
+    const data = generateData(
+      pointsCount,
+      maxX,
+      maxY,
+      offset,
+      getOption(randomization)
     );
+    setGeneratedData(data);
+    console.log('Сгенерированные данные', data);
+  };
 
   const operations = (
     <div className="operations">
@@ -67,7 +77,7 @@ const Clustering = () => {
 
   return (
     <div className="clustering-box">
-      <Tabs defaultActiveKey="2" tabBarExtraContent={operations}>
+      <Tabs defaultActiveKey="1" tabBarExtraContent={operations}>
         <TabPane tab="K-MEANS" key="1">
           <KMeansComponent
             data={generatedData.data}
