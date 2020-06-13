@@ -18,7 +18,6 @@ const KMeansComponent = ({
 }) => {
   const canvas = useRef();
   const [centersCount, setCentersCount] = useState(5);
-  const [clustersCount, setClustersCount] = useState(5);
   const [isShowLengths, setIsShowLengths] = useState(false);
   const [mainLengths, setMainLengths] = useState([]);
   const [clusterColors, setClusterColors] = useState([]);
@@ -30,7 +29,7 @@ const KMeansComponent = ({
     context.fillStyle = '#ffffff';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    const generateColors = generateClusterColors(clustersCount);
+    const generateColors = generateClusterColors(centersCount);
     setClusterColors(generateColors);
     const kmeans = KMeans({
       data,
@@ -82,8 +81,6 @@ const KMeansComponent = ({
   }, [data]);
 
   const handleOnChangeCentersCount = e => setCentersCount(e.target.value);
-
-  const handleOnChangeClustersCount = e => setClustersCount(e.target.value);
 
   const handleRun = () => {
     kmeansRun(canvas.current.getContext('2d'));
@@ -139,18 +136,13 @@ const KMeansComponent = ({
       />
       <div className="controls">
         <Input
-          placeholder="Количество центров (5)"
-          onChange={handleOnChangeCentersCount}
-          allowClear
-        />
-        <Input
           placeholder="Количество кластеров (5)"
-          onChange={handleOnChangeClustersCount}
+          onChange={handleOnChangeCentersCount}
           allowClear
         />
         {!isKmeansWorking && (
           <Alert
-            message={`Полученные данные для ${clustersCount} кластеров с расчитанными средними растояниями до точек кластера: `}
+            message={`Полученные данные для ${centersCount} кластеров с расчитанными средними растояниями до точек кластера: `}
             description={description}
             type="info"
           />
